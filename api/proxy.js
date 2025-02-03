@@ -1,10 +1,10 @@
 export default async function handler(req, res) {
-  const url = new URL(req.url, `https://${req.headers.host}`);
+  const url = new URL(req.url, https://${req.headers.host});
   const { host, pathname } = url;
 
   if (pathname === '/robots.txt') {
-    const robots = `User-agent: *
-Disallow: /`;
+    const robots = User-agent: *
+Disallow: /;
     return res.status(200).send(robots);
   }
 
@@ -15,8 +15,8 @@ Disallow: /`;
     targetDomain = host;
   }
 
-  const origin = 'http://castopia.ct.ws';
-  const actualUrl = new URL(`${origin}${pathname}${url.search}${url.hash}`);
+  const origin = https://${targetDomain};
+  const actualUrl = new URL(${origin}${pathname}${url.search}${url.hash});
 
   const modifiedRequestInit = {
     method: req.method,
@@ -36,11 +36,12 @@ Disallow: /`;
   if (contentType && /^(application\/x-javascript|text\/)/i.test(contentType)) {
     let text = new TextDecoder('utf-8').decode(body);
 
-    text = text.replace(new RegExp(`(//|https?://)(${targetDomains.join('|')})`, 'g'), `$1castopia.ct.ws`);
+    text = text.replace(new RegExp((//|https?://)(${targetDomains.join('|')}), 'g'), $1${host});
 
     text = text.replace(/http:\/\/(?!localhost|127\.0\.0\.1)([^"']+)/g, 'https://$1');
 
     text = removeAdScripts(text);
+
     text = replaceLoginStatus(text);
 
     body = new TextEncoder().encode(text).buffer;
