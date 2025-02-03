@@ -16,7 +16,8 @@ Disallow: /`;
   }
 
   const origin = `https://${targetDomain}`;
-  const actualUrl = new URL(`${origin}${pathname}${url.search}${url.hash}`);
+  const cleanedSearch = url.search.replace(/([&?])i=\d+/g, '');
+  const actualUrl = new URL(`${origin}${pathname}${cleanedSearch}${url.hash}`);
 
   const modifiedRequestInit = {
     method: req.method,
