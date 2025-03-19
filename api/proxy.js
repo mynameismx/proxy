@@ -47,8 +47,6 @@ export default async function handler(req, res) {
 
     text = replaceLoginStatus(text);
 
-    text = addScript(text);
-
     body = new TextEncoder().encode(text).buffer;
   }
 
@@ -58,20 +56,8 @@ export default async function handler(req, res) {
 }
 
 function replaceLoginStatus(text) {
+  const { pathname } = new URL(req.url, `https://${req.headers.host}`);
   const loginStatusRegex = /<div id="login-status">.*?<\/div>/s;
-  const newContent = '<div id="login-status"><a href="http://castopia.ct.ws" class="login-status-create-account btn">Прокси-зеркало</a> <span>|</span> <a href="http://wd.castopia.ct.ws" class="login-status-sign-in btn btn-primary">Wikidot</a></div>';
+  const newContent = '<div id="login-status"><a href="http://castopia.ct.ws" class="login-status-create-account btn">Прокси-зеркало</a> <span>|</span> <a href="http://wd.castopia.ct.ws/${pathname}" class="login-status-sign-in btn btn-primary">Wikidot</a></div>';
   return text.replace(loginStatusRegex, newContent);
-}
-
-function addScript(text) {
-  const script = `
-<script>
-window.addEventListener('message', function(e) {
-    var iframe = document.querySelectorAll(".main-iframe iframe.html-block-iframe")[0]
-    iframe.style.height = e.data.height + 'px';
-    iframe.style.width = e.data.width + 'px';
-}, false);
-</script>
-  `;
-  return text.replace(/<\/body>/i, `${script}</body>`);
 }
