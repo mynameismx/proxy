@@ -45,6 +45,8 @@ export default async function handler(req, res) {
     });
 
     text = replaceLoginStatus(text);
+
+    text = addJquery(text);
     
     text = addScript(text);
 
@@ -62,18 +64,30 @@ function replaceLoginStatus(text) {
   return text.replace(loginStatusRegex, newContent);
 }
 
+function addJquery(text) {
+  const jquery = `
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  `;
+  return text.replace(/<\/head>/i, `${script}</head>`);
+}
+
 function addScript(text) {
   const script = `
 <script>
-function fixIframe() {
-    let iframes = document.getElementsByTagName('iframe');
-    for (let i = 0; i < iframes.length; i++) {
-        let iframe = document.getElementsByTagName('iframe')[i];        
-        iframe.height = iframe.contentWindow.parent.innerHeight;
-    }
-}
-window.onload = fixIframe();
-</script>
+$(function() {
+   $('.frame').load(function(){
+		var target = this;
+		var content = $(target).contents().find('body');
+		$(target).height($(content).outerHeight(true));
+ 
+		$(content).on("DOMSubtreeModified click", function (event){
+			setTimeout(function(){
+				$(target).stop().animate({height: $(content).outerHeight(true)}, 200);
+			}, 400);
+		});
+	});
+});
+</script> 
   `;
   return text.replace(/<\/body>/i, `${script}</body>`);
 }
