@@ -56,7 +56,6 @@ export default async function handler(req, res) {
 }
 
 function replaceLoginStatus(text) {
-  const { pathname } = new URL(req.url, `https://${req.headers.host}`);
   const loginStatusRegex = /<div id="login-status">.*?<\/div>/s;
   const newContent = '<div id="login-status"><a href="http://castopia.ct.ws" class="login-status-create-account btn">Прокси-зеркало</a> <span>|</span> <a href="http://wd.castopia.ct.ws/${pathname}" class="login-status-sign-in btn btn-primary">Wikidot</a></div>';
   return text.replace(loginStatusRegex, newContent);
