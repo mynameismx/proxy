@@ -46,6 +46,20 @@ export default async function handler(req, res) {
 
     text = replaceLoginStatus(text);
 
+    const script = `
+    <script>
+      function fixIframe() {
+        let iframes = document.getElementsByTagName('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+            let iframe = document.getElementsByTagName('iframe')[i];        
+            iframe.height = iframe.contentWindow.parent.innerHeight;
+        }
+      }
+      window.onload = fixIframe();
+    </script>
+    `;
+    text = text.replace('</body>', `${script}</body>`); // Append the script just before the closing </body> tag
+
     body = new TextEncoder().encode(text).buffer;
   }
 
