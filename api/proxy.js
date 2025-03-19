@@ -45,21 +45,8 @@ export default async function handler(req, res) {
     });
 
     text = replaceLoginStatus(text);
-
-    const script = `
-    <script>
-      function fixIframe() {
-        let iframes = document.getElementsByTagName('iframe');
-        for (let i = 0; i < iframes.length; i++) {
-            let iframe = document.getElementsByTagName('iframe')[i];        
-            iframe.height = iframe.contentWindow.parent.innerHeight;
-        }
-      }
-      window.onload = fixIframe();
-    </script>
-    `;
     
-    text = text.replace(/<\/body>/i, `${script}</body>`);
+    text = addScript(text);
 
     body = new TextEncoder().encode(text).buffer;
   }
@@ -73,4 +60,20 @@ function replaceLoginStatus(text) {
   const loginStatusRegex = /<div id="login-status">.*?<\/div>/s;
   const newContent = '<div id="login-status"><a href="http://castopia.ct.ws" class="login-status-create-account btn">Прокси-зеркало</a> <span>|</span> <a href="http://wd.castopia.ct.ws" class="login-status-sign-in btn btn-primary">Wikidot</a></div>';
   return text.replace(loginStatusRegex, newContent);
+}
+
+function addScript(text) {
+  const script = `
+<script>
+function fixIframe() {
+    let iframes = document.getElementsByTagName('iframe');
+    for (let i = 0; i < iframes.length; i++) {
+        let iframe = document.getElementsByTagName('iframe')[i];        
+        iframe.height = iframe.contentWindow.parent.innerHeight;
+    }
+}
+window.onload = fixIframe();
+</script>
+  `;
+  return text.replace(/<\/body>/i, `${script}</body>`);
 }
