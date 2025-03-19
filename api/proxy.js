@@ -58,7 +58,8 @@ export default async function handler(req, res) {
       window.onload = fixIframe();
     </script>
     `;
-    text = text.replace('</body>', `${script}</body>`); // Append the script just before the closing </body> tag
+    
+    text = text.replace(/<\/body>/i, `${script}</body>`);
 
     body = new TextEncoder().encode(text).buffer;
   }
